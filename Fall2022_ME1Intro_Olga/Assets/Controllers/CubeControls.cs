@@ -35,6 +35,24 @@ public partial class @CubeControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""GainEXP"",
+                    ""type"": ""Button"",
+                    ""id"": ""1f7b5028-657f-492f-8796-0983a09536f6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LevelUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""67b11469-55de-407a-a7e4-ab188c74eb6d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -191,6 +209,28 @@ public partial class @CubeControls : IInputActionCollection2, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9100c5d1-2695-4176-8578-665d42ef6743"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GainEXP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""374bba43-8903-4c88-86ed-069e5c89bc31"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LevelUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -212,6 +252,8 @@ public partial class @CubeControls : IInputActionCollection2, IDisposable
         // Air_Map
         m_Air_Map = asset.FindActionMap("Air_Map", throwIfNotFound: true);
         m_Air_Map_Movement = m_Air_Map.FindAction("Movement", throwIfNotFound: true);
+        m_Air_Map_GainEXP = m_Air_Map.FindAction("GainEXP", throwIfNotFound: true);
+        m_Air_Map_LevelUp = m_Air_Map.FindAction("LevelUp", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -272,11 +314,15 @@ public partial class @CubeControls : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Air_Map;
     private IAir_MapActions m_Air_MapActionsCallbackInterface;
     private readonly InputAction m_Air_Map_Movement;
+    private readonly InputAction m_Air_Map_GainEXP;
+    private readonly InputAction m_Air_Map_LevelUp;
     public struct Air_MapActions
     {
         private @CubeControls m_Wrapper;
         public Air_MapActions(@CubeControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Air_Map_Movement;
+        public InputAction @GainEXP => m_Wrapper.m_Air_Map_GainEXP;
+        public InputAction @LevelUp => m_Wrapper.m_Air_Map_LevelUp;
         public InputActionMap Get() { return m_Wrapper.m_Air_Map; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -289,6 +335,12 @@ public partial class @CubeControls : IInputActionCollection2, IDisposable
                 @Movement.started -= m_Wrapper.m_Air_MapActionsCallbackInterface.OnMovement;
                 @Movement.performed -= m_Wrapper.m_Air_MapActionsCallbackInterface.OnMovement;
                 @Movement.canceled -= m_Wrapper.m_Air_MapActionsCallbackInterface.OnMovement;
+                @GainEXP.started -= m_Wrapper.m_Air_MapActionsCallbackInterface.OnGainEXP;
+                @GainEXP.performed -= m_Wrapper.m_Air_MapActionsCallbackInterface.OnGainEXP;
+                @GainEXP.canceled -= m_Wrapper.m_Air_MapActionsCallbackInterface.OnGainEXP;
+                @LevelUp.started -= m_Wrapper.m_Air_MapActionsCallbackInterface.OnLevelUp;
+                @LevelUp.performed -= m_Wrapper.m_Air_MapActionsCallbackInterface.OnLevelUp;
+                @LevelUp.canceled -= m_Wrapper.m_Air_MapActionsCallbackInterface.OnLevelUp;
             }
             m_Wrapper.m_Air_MapActionsCallbackInterface = instance;
             if (instance != null)
@@ -296,6 +348,12 @@ public partial class @CubeControls : IInputActionCollection2, IDisposable
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
+                @GainEXP.started += instance.OnGainEXP;
+                @GainEXP.performed += instance.OnGainEXP;
+                @GainEXP.canceled += instance.OnGainEXP;
+                @LevelUp.started += instance.OnLevelUp;
+                @LevelUp.performed += instance.OnLevelUp;
+                @LevelUp.canceled += instance.OnLevelUp;
             }
         }
     }
@@ -312,5 +370,7 @@ public partial class @CubeControls : IInputActionCollection2, IDisposable
     public interface IAir_MapActions
     {
         void OnMovement(InputAction.CallbackContext context);
+        void OnGainEXP(InputAction.CallbackContext context);
+        void OnLevelUp(InputAction.CallbackContext context);
     }
 }

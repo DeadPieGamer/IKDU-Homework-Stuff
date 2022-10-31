@@ -132,11 +132,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 554553509}
+  - component: {fileID: 554553511}
+  - component: {fileID: 554553510}
   - component: {fileID: 554553508}
   - component: {fileID: 554553507}
   - component: {fileID: 554553506}
   - component: {fileID: 554553505}
-  - component: {fileID: 554553510}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -251,6 +252,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
+  expToGain: 1
+--- !u!114 &554553511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 554553504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85823032ecda2804e95b6668452cd8ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameOfPlayer: {fileID: 11400000, guid: 48ff6bbb70a270c428cb5de9d1091413, type: 2}
+  playerStartLevel: {fileID: 11400000, guid: 44c391a954f87b64783bc8092c8c6a4a, type: 2}
+  levelUpMsg: ^ reached level #!
+  expGainMsg: "^ has # out of \xA4 EXP"
 --- !u!1 &656725887
 GameObject:
   m_ObjectHideFlags: 0
@@ -918,7 +936,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "Controls:\nForward - W/\u25B2\nBack - S/\u25BC\nLeft - A/\u25C4\nRight
-    - D/\u25BA\nUp - Space\nDown - Shift/Ctrl"
+    - D/\u25BA\nUp - Space\nDown - Shift/Ctrl\nGain EXP - E\nLevel Up - L"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -945,7 +963,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 11.85
+  m_fontSize: 9.2
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

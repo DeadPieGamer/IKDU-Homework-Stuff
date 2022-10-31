@@ -13,6 +13,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "GainEXP",
+                    "type": "Button",
+                    "id": "1f7b5028-657f-492f-8796-0983a09536f6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "LevelUp",
+                    "type": "Button",
+                    "id": "67b11469-55de-407a-a7e4-ab188c74eb6d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -169,6 +187,28 @@
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "9100c5d1-2695-4176-8578-665d42ef6743",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "GainEXP",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "374bba43-8903-4c88-86ed-069e5c89bc31",
+                    "path": "<Keyboard>/l",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LevelUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

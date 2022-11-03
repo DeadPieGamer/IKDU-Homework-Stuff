@@ -1,3 +1,4 @@
 The assignment description carries no part saying that using the Unity Animator is a *must*, so I have done these animations using scripts
+Also, the animation assignment Unity project is the one titled "Skeleton Animation"
 
 https://github.com/DeadPieGamer/IKDU-Homework-Stuff

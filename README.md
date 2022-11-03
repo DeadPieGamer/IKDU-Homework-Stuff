@@ -1,2 +1,2 @@
-# Olga
- Is Homework for IKDU with Olga
+# Homework
+ Is Homework for IKDU

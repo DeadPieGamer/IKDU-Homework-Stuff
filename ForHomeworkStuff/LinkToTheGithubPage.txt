@@ -1,1 +1,3 @@
+The assignment description carries no part saying that using the Unity Animator is a *must*, so I have done these animations using scripts
+
 https://github.com/DeadPieGamer/IKDU-Homework-Stuff

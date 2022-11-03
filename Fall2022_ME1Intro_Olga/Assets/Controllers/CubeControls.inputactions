@@ -31,6 +31,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "AnyInput",
+                    "type": "Button",
+                    "id": "1bef6543-4573-4268-b612-e8644ae9eea7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -207,6 +216,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "LevelUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "454bd477-8f60-45c9-a6cf-b8c9030a85fa",
+                    "path": "<Keyboard>/anyKey",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AnyInput",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

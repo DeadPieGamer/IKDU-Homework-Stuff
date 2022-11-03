@@ -53,6 +53,15 @@ public partial class @CubeControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AnyInput"",
+                    ""type"": ""Button"",
+                    ""id"": ""1bef6543-4573-4268-b612-e8644ae9eea7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -231,6 +240,17 @@ public partial class @CubeControls : IInputActionCollection2, IDisposable
                     ""action"": ""LevelUp"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""454bd477-8f60-45c9-a6cf-b8c9030a85fa"",
+                    ""path"": ""<Keyboard>/anyKey"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AnyInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -254,6 +274,7 @@ public partial class @CubeControls : IInputActionCollection2, IDisposable
         m_Air_Map_Movement = m_Air_Map.FindAction("Movement", throwIfNotFound: true);
         m_Air_Map_GainEXP = m_Air_Map.FindAction("GainEXP", throwIfNotFound: true);
         m_Air_Map_LevelUp = m_Air_Map.FindAction("LevelUp", throwIfNotFound: true);
+        m_Air_Map_AnyInput = m_Air_Map.FindAction("AnyInput", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -316,6 +337,7 @@ public partial class @CubeControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Air_Map_Movement;
     private readonly InputAction m_Air_Map_GainEXP;
     private readonly InputAction m_Air_Map_LevelUp;
+    private readonly InputAction m_Air_Map_AnyInput;
     public struct Air_MapActions
     {
         private @CubeControls m_Wrapper;
@@ -323,6 +345,7 @@ public partial class @CubeControls : IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_Air_Map_Movement;
         public InputAction @GainEXP => m_Wrapper.m_Air_Map_GainEXP;
         public InputAction @LevelUp => m_Wrapper.m_Air_Map_LevelUp;
+        public InputAction @AnyInput => m_Wrapper.m_Air_Map_AnyInput;
         public InputActionMap Get() { return m_Wrapper.m_Air_Map; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -341,6 +364,9 @@ public partial class @CubeControls : IInputActionCollection2, IDisposable
                 @LevelUp.started -= m_Wrapper.m_Air_MapActionsCallbackInterface.OnLevelUp;
                 @LevelUp.performed -= m_Wrapper.m_Air_MapActionsCallbackInterface.OnLevelUp;
                 @LevelUp.canceled -= m_Wrapper.m_Air_MapActionsCallbackInterface.OnLevelUp;
+                @AnyInput.started -= m_Wrapper.m_Air_MapActionsCallbackInterface.OnAnyInput;
+                @AnyInput.performed -= m_Wrapper.m_Air_MapActionsCallbackInterface.OnAnyInput;
+                @AnyInput.canceled -= m_Wrapper.m_Air_MapActionsCallbackInterface.OnAnyInput;
             }
             m_Wrapper.m_Air_MapActionsCallbackInterface = instance;
             if (instance != null)
@@ -354,6 +380,9 @@ public partial class @CubeControls : IInputActionCollection2, IDisposable
                 @LevelUp.started += instance.OnLevelUp;
                 @LevelUp.performed += instance.OnLevelUp;
                 @LevelUp.canceled += instance.OnLevelUp;
+                @AnyInput.started += instance.OnAnyInput;
+                @AnyInput.performed += instance.OnAnyInput;
+                @AnyInput.canceled += instance.OnAnyInput;
             }
         }
     }
@@ -372,5 +401,6 @@ public partial class @CubeControls : IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnGainEXP(InputAction.CallbackContext context);
         void OnLevelUp(InputAction.CallbackContext context);
+        void OnAnyInput(InputAction.CallbackContext context);
     }
 }

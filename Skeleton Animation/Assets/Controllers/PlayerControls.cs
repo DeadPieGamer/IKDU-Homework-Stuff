@@ -35,6 +35,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LetGo"",
+                    ""type"": ""Button"",
+                    ""id"": ""f8dcd139-5689-4f34-91c8-89534b675de6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -147,6 +156,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4c660a18-5700-467b-a814-16ef36a020c0"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""LetGo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -168,6 +188,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         // GroundMovement
         m_GroundMovement = asset.FindActionMap("GroundMovement", throwIfNotFound: true);
         m_GroundMovement_Movement = m_GroundMovement.FindAction("Movement", throwIfNotFound: true);
+        m_GroundMovement_LetGo = m_GroundMovement.FindAction("LetGo", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -228,11 +249,13 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_GroundMovement;
     private IGroundMovementActions m_GroundMovementActionsCallbackInterface;
     private readonly InputAction m_GroundMovement_Movement;
+    private readonly InputAction m_GroundMovement_LetGo;
     public struct GroundMovementActions
     {
         private @PlayerControls m_Wrapper;
         public GroundMovementActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_GroundMovement_Movement;
+        public InputAction @LetGo => m_Wrapper.m_GroundMovement_LetGo;
         public InputActionMap Get() { return m_Wrapper.m_GroundMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -245,6 +268,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Movement.started -= m_Wrapper.m_GroundMovementActionsCallbackInterface.OnMovement;
                 @Movement.performed -= m_Wrapper.m_GroundMovementActionsCallbackInterface.OnMovement;
                 @Movement.canceled -= m_Wrapper.m_GroundMovementActionsCallbackInterface.OnMovement;
+                @LetGo.started -= m_Wrapper.m_GroundMovementActionsCallbackInterface.OnLetGo;
+                @LetGo.performed -= m_Wrapper.m_GroundMovementActionsCallbackInterface.OnLetGo;
+                @LetGo.canceled -= m_Wrapper.m_GroundMovementActionsCallbackInterface.OnLetGo;
             }
             m_Wrapper.m_GroundMovementActionsCallbackInterface = instance;
             if (instance != null)
@@ -252,6 +278,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
+                @LetGo.started += instance.OnLetGo;
+                @LetGo.performed += instance.OnLetGo;
+                @LetGo.canceled += instance.OnLetGo;
             }
         }
     }
@@ -268,5 +297,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     public interface IGroundMovementActions
     {
         void OnMovement(InputAction.CallbackContext context);
+        void OnLetGo(InputAction.CallbackContext context);
     }
 }

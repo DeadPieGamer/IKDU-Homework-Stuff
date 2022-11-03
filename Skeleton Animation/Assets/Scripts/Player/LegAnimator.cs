@@ -16,6 +16,12 @@ public class LegAnimator : MonoBehaviour
     private Vector2 stepStartPos;
     private Vector2 stepEndPos;
 
+    private List<GravityFieldSquare> gravityFields = new List<GravityFieldSquare>();
+
+    private Quaternion stepEndRotation;
+
+    private Vector2 endedCastFromWhere;
+
     // Update is called once per frame
     void Update()
     {
@@ -36,6 +42,7 @@ public class LegAnimator : MonoBehaviour
             // Do this for every place a ray check should happen
             foreach (Transform toRayFrom in raysFromHere)
             {
+                // endedCastFromWhere = toRayFrom.position;
                 // Draw the ray that'll be shown
                 Debug.DrawRay(toRayFrom.position, -toRayFrom.transform.up * rayLength, Color.red);
                 // Raycast down from the toRayFrom and act upon its results
@@ -50,7 +57,7 @@ public class LegAnimator : MonoBehaviour
     /// <param name="myRay"></param>
     private void CheckGround(RaycastHit2D myRay)
     {
-        // If this ray doesn't have a collider, ignore it
+        // If this ray doesn't hit a collider, ignore it
         if (myRay.collider == false)
         {
             return;
@@ -67,6 +74,7 @@ public class LegAnimator : MonoBehaviour
                 // Set the start and end position
                 stepStartPos = transform.position;
                 stepEndPos = myRay.point;
+                // stepEndRotation = Quaternion.LookRotation(Vector3.forward, endedCastFromWhere - myRay.point);
                 // Reset the elapse step time
                 stepElapsed = 0f;
                 // Begin taking a step
@@ -95,6 +103,7 @@ public class LegAnimator : MonoBehaviour
             isTakingAStep = false;
             // Set the target position as the target end position, to avoid any "> 1f" lerp conflicts
             targetPos = stepEndPos;
+            // transform.rotation = stepEndRotation;
         }
         else // If the step is still happening
         {
@@ -106,5 +115,22 @@ public class LegAnimator : MonoBehaviour
 
         // Set the new position
         transform.position = targetPos;
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("GravityField"))
+        {
+            if (!gravityFields.Contains(collision.GetComponent<GravityFieldSquare>()))
+            {
+                gravityFields.Add(collision.GetComponent<GravityFieldSquare>());
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        // Removes the current gravityField from memory
+        gravityFields.Remove(collision.GetComponent<GravityFieldSquare>());
     }
 }

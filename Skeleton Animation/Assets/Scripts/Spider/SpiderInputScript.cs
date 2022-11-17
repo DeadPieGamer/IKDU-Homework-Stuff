@@ -69,7 +69,7 @@ public class SpiderInputScript : MonoBehaviour
             {
                 useHori = true;
             }
-            else
+            if (gFSquare.verticalInputs)
             {
                 useVerti = true;
             }
@@ -92,13 +92,125 @@ public class SpiderInputScript : MonoBehaviour
             targetVelocity = new Vector2(targetVelocity.x, 0f);
         }
 
-        // Sets isWalking to true if movement is > 0f
+        // Sets isWalking to true if movement is > 0f, else sets it to false
         isWalking = targetVelocity.magnitude > 0f ? true : false;
 
-        // Normalises the movement vector
-        targetVelocity.Normalize();
+        // Make targetvelocity be in the direction of the priority
+
+        // Create list of input directions
+        List<GravityFieldSquare.PossibleDirections> myInputDirections = new List<GravityFieldSquare.PossibleDirections>();
+
+        // Add directions if input is in said direction
+        if (targetVelocity.x > 0)
+        {
+            myInputDirections.Add(GravityFieldSquare.PossibleDirections.right);
+        }
+        else if (targetVelocity.x < 0)
+        {
+            myInputDirections.Add(GravityFieldSquare.PossibleDirections.left);
+        }
+
+        if (targetVelocity.y > 0)
+        {
+            myInputDirections.Add(GravityFieldSquare.PossibleDirections.up);
+        }
+        else if (targetVelocity.y < 0)
+        {
+            myInputDirections.Add(GravityFieldSquare.PossibleDirections.down);
+        }
+
+        GravityFieldSquare thePriorityGF = null;
+
+        // This code figures out which gravity field should be the priority, based on inputs
+        foreach (GravityFieldSquare gFSquare in fieldsImIn)
+        {
+            foreach (GravityFieldSquare.PossibleDirections theSquaresDirections in gFSquare.priorityDirection)
+            {
+                foreach (GravityFieldSquare.PossibleDirections directionOfInput in myInputDirections)
+                {
+                    if (theSquaresDirections == directionOfInput)
+                    {
+                        thePriorityGF = gFSquare;
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Based on GF whatDirection and input, makes sure inputs move character in the right direction
+        if (thePriorityGF != null)
+        {
+            targetVelocity = ReturnTargetDirection(myInputDirections, thePriorityGF);
+        }
+        else if (isWalking)
+        {
+            targetVelocity = ReturnTargetDirection(myInputDirections, fieldsImIn[0]);
+        }
 
         // Sets the velocity to the movement speed * the input
         myRB.velocity = targetVelocity * moveSpeed;
+    }
+
+    private Vector2 ReturnTargetDirection(List<GravityFieldSquare.PossibleDirections> myInputDirections, GravityFieldSquare thePriorityGF)
+    {
+        foreach (GravityFieldSquare.PossibleDirections directionOfInput in myInputDirections)
+        {
+            foreach (GravityFieldSquare.PossibleDirections directionOfGF in thePriorityGF.whatDirection)
+            {
+                switch (directionOfGF)
+                {
+                    case (GravityFieldSquare.PossibleDirections.up):
+                        if (directionOfInput == GravityFieldSquare.PossibleDirections.right)
+                        {
+                            return -thePriorityGF.transform.right;
+                        }
+                        else if (directionOfInput == GravityFieldSquare.PossibleDirections.left)
+                        {
+                            return thePriorityGF.transform.right;
+                        }
+                        break;
+
+                    case (GravityFieldSquare.PossibleDirections.down):
+                        if (directionOfInput == GravityFieldSquare.PossibleDirections.right)
+                        {
+                            return thePriorityGF.transform.right;
+                        }
+                        else if (directionOfInput == GravityFieldSquare.PossibleDirections.left)
+                        {
+                            return -thePriorityGF.transform.right;
+                        }
+                        break;
+
+                    case (GravityFieldSquare.PossibleDirections.left):
+                        if (directionOfInput == GravityFieldSquare.PossibleDirections.up)
+                        {
+                            return -thePriorityGF.transform.right;
+                        }
+                        else if (directionOfInput == GravityFieldSquare.PossibleDirections.down)
+                        {
+                            return thePriorityGF.transform.right;
+                        }
+                        break;
+
+                    case (GravityFieldSquare.PossibleDirections.right):
+                        if (directionOfInput == GravityFieldSquare.PossibleDirections.up)
+                        {
+                            return thePriorityGF.transform.right;
+                        }
+                        else if (directionOfInput == GravityFieldSquare.PossibleDirections.down)
+                        {
+                            return -thePriorityGF.transform.right;
+                        }
+                        break;
+
+                    default:
+                        Debug.Log("Somehow a movement direction is no direction");
+                        break;
+                }
+            }
+        }
+        Debug.Log("Somehow didn't return anything. Debugging time");
+        return Vector2.zero;
     }
 }

@@ -6,6 +6,8 @@ public class PlayerControlScript : MonoBehaviour
 {
     [Header("Stats")]
     [SerializeField, Tooltip("Speed at which the player will move")] private float moveSpeed = 5f;
+    [SerializeField, Tooltip("Speed at which the player rotates")] private float verRotateSpeed = 5f;
+    [SerializeField, Tooltip("Speed at which the player rotates")] private float horRotateSpeed = 5f;
 
     private Vector3 v3MoveInput;
 
@@ -52,7 +54,18 @@ public class PlayerControlScript : MonoBehaviour
     // FixedUpdate is called once per physics iteration
     private void FixedUpdate()
     {
-        v3MoveInput = cubeControls.Air_Map.Movement.ReadValue<Vector3>();
+        Vector3 currentRotationEuler = transform.rotation.eulerAngles;
+
+        float targetXRot = cubeControls.Air_Map.FrontRotate.ReadValue<float>() * verRotateSpeed * Time.fixedDeltaTime + currentRotationEuler.x;
+        float targetYRot = cubeControls.Air_Map.SideRotate.ReadValue<float>() * horRotateSpeed * Time.fixedDeltaTime + currentRotationEuler.y;
+
+
+
+        // Rotates player based on input
+        myRb.MoveRotation(Quaternion.Euler(targetXRot, targetYRot, 0f));
+
+        // Translates movement input into forwards oriented movement
+        v3MoveInput = cubeControls.Air_Map.MoveForward.ReadValue<float>() * transform.forward;
         myRb.velocity = v3MoveInput * moveSpeed;
     }
 }

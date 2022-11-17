@@ -59,7 +59,7 @@ public class SpiderLegMover : MonoBehaviour
             return;
         }
         // Only act if it hit ground
-        if (myRay.collider.tag == "Ground")
+        if (myRay.collider.CompareTag("Ground"))
         {
             // Finds distance to ray from leg
             Vector2 distanceToLeg = (Vector2)transform.position - myRay.point;

@@ -169,6 +169,89 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""AvatarMovement"",
+            ""id"": ""5f8bfae0-d556-48e4-8878-9c77d16d0973"",
+            ""actions"": [
+                {
+                    ""name"": ""Walk"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""39f1ca53-aace-4687-bcc7-9103cfd640f1"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""AD"",
+                    ""id"": ""81be061d-2710-4d58-90c2-72620c5536f2"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Walk"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""be9d5c69-84e9-4c2d-84e6-d9fbf6fdd05a"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Walk"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""3bfab41d-dcd4-44b3-b4ca-abfdb33ce67d"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Walk"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Arrows"",
+                    ""id"": ""f8397276-17bb-4b8e-a3ae-d57b6721eda9"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Walk"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""3b2614b2-f3a0-4937-b6b5-0a76658403e2"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Walk"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""96587cc0-ad90-411e-a5ab-2bda6a98662b"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Walk"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -189,6 +272,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_GroundMovement = asset.FindActionMap("GroundMovement", throwIfNotFound: true);
         m_GroundMovement_Movement = m_GroundMovement.FindAction("Movement", throwIfNotFound: true);
         m_GroundMovement_LetGo = m_GroundMovement.FindAction("LetGo", throwIfNotFound: true);
+        // AvatarMovement
+        m_AvatarMovement = asset.FindActionMap("AvatarMovement", throwIfNotFound: true);
+        m_AvatarMovement_Walk = m_AvatarMovement.FindAction("Walk", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -285,6 +371,39 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         }
     }
     public GroundMovementActions @GroundMovement => new GroundMovementActions(this);
+
+    // AvatarMovement
+    private readonly InputActionMap m_AvatarMovement;
+    private IAvatarMovementActions m_AvatarMovementActionsCallbackInterface;
+    private readonly InputAction m_AvatarMovement_Walk;
+    public struct AvatarMovementActions
+    {
+        private @PlayerControls m_Wrapper;
+        public AvatarMovementActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Walk => m_Wrapper.m_AvatarMovement_Walk;
+        public InputActionMap Get() { return m_Wrapper.m_AvatarMovement; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(AvatarMovementActions set) { return set.Get(); }
+        public void SetCallbacks(IAvatarMovementActions instance)
+        {
+            if (m_Wrapper.m_AvatarMovementActionsCallbackInterface != null)
+            {
+                @Walk.started -= m_Wrapper.m_AvatarMovementActionsCallbackInterface.OnWalk;
+                @Walk.performed -= m_Wrapper.m_AvatarMovementActionsCallbackInterface.OnWalk;
+                @Walk.canceled -= m_Wrapper.m_AvatarMovementActionsCallbackInterface.OnWalk;
+            }
+            m_Wrapper.m_AvatarMovementActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Walk.started += instance.OnWalk;
+                @Walk.performed += instance.OnWalk;
+                @Walk.canceled += instance.OnWalk;
+            }
+        }
+    }
+    public AvatarMovementActions @AvatarMovement => new AvatarMovementActions(this);
     private int m_KeyboardSchemeIndex = -1;
     public InputControlScheme KeyboardScheme
     {
@@ -298,5 +417,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnLetGo(InputAction.CallbackContext context);
+    }
+    public interface IAvatarMovementActions
+    {
+        void OnWalk(InputAction.CallbackContext context);
     }
 }
